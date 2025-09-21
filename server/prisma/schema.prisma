@@ -1,0 +1,87 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int      @id @default(autoincrement())
+  googleId      String   @unique @map("google_id")
+  email         String   @unique
+  name          String
+  accessToken   String?  @map("access_token")
+  refreshToken  String?  @map("refresh_token")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  videos   Video[]
+  notes    Note[]
+
+  @@map("users")
+}
+
+model Video {
+  id              Int      @id @default(autoincrement())
+  userId          Int      @map("user_id")
+  youtubeVideoId  String   @unique @map("youtube_video_id")
+  title           String
+  description     String?
+  thumbnailUrl    String?  @map("thumbnail_url")
+  viewCount       Int      @default(0) @map("view_count")
+  likeCount       Int      @default(0) @map("like_count")
+  commentCount    Int      @default(0) @map("comment_count")
+  publishedAt     DateTime? @map("published_at")
+  youtubeMetadata Json?    @map("youtube_metadata")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comments Comment[]
+  notes    Note[]
+
+  @@map("videos")
+}
+
+model Comment {
+  id                Int      @id @default(autoincrement())
+  videoId           Int      @map("video_id")
+  youtubeCommentId  String   @unique @map("youtube_comment_id")
+  authorName        String   @map("author_name")
+  authorChannelUrl  String?  @map("author_channel_url")
+  textDisplay       String   @map("text_display")
+  likeCount         Int      @default(0) @map("like_count")
+  publishedAt       DateTime? @map("published_at")
+  updatedAt         DateTime? @map("updated_at")
+  isReply           Boolean  @default(false) @map("is_reply")
+  parentCommentId   String?  @map("parent_comment_id")
+  youtubeMetadata   Json?    @map("youtube_metadata")
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  video Video @relation(fields: [videoId], references: [id], onDelete: Cascade)
+
+  @@map("comments")
+}
+
+model Note {
+  id          Int      @id @default(autoincrement())
+  videoId     Int      @map("video_id")
+  userId      Int      @map("user_id")
+  title       String
+  content     String
+  category    String?
+  priority    Int      @default(1)
+  isCompleted Boolean  @default(false) @map("is_completed")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  video Video @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notes")
+}

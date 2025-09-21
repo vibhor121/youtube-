@@ -1,0 +1,12 @@
+{
+  "/not-found": "app/not-found.js",
+  "/page": "app/page.js",
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/api/comments/video/[videoId]/route": "app/api/comments/video/[videoId]/route.js",
+  "/api/auth/jwt/route": "app/api/auth/jwt/route.js",
+  "/api/notes/video/[videoId]/route": "app/api/notes/video/[videoId]/route.js",
+  "/api/videos/route": "app/api/videos/route.js",
+  "/api/comments/route": "app/api/comments/route.js",
+  "/api/videos/[id]/route": "app/api/videos/[id]/route.js"
+}

@@ -1,0 +1,21 @@
+{
+  "name": "youtube-companion-dashboard",
+  "version": "1.0.0",
+  "description": "A comprehensive dashboard for managing YouTube videos with comments and notes",
+  "main": "server/index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
+    "client:dev": "cd client && npm run dev",
+    "server:dev": "cd server && npm run dev",
+    "build": "cd client && npm run build",
+    "start": "cd server && npm start",
+    "install:all": "npm install && cd client && npm install && cd ../server && npm install"
+  },
+  "keywords": ["youtube", "dashboard", "nextjs", "nodejs", "postgresql"],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
+

@@ -1,0 +1,15 @@
+🚀 Server running on port 5000
+📊 Health check: http://localhost:5000/health
+🌍 Environment: development
+Token verification error: JsonWebTokenError: jwt malformed
+    at module.exports [as verify] (/home/vibhor/Downloads/vibhorpersonal/Cactro/21-9-25-a/server/node_modules/jsonwebtoken/verify.js:70:17)
+    at authenticateToken (/home/vibhor/Downloads/vibhorpersonal/Cactro/21-9-25-a/server/middleware/auth.js:16:25)
+    at Layer.handle [as handle_request] (/home/vibhor/Downloads/vibhorpersonal/Cactro/21-9-25-a/server/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/vibhor/Downloads/vibhorpersonal/Cactro/21-9-25-a/server/node_modules/express/lib/router/route.js:149:13)
+    at Route.dispatch (/home/vibhor/Downloads/vibhorpersonal/Cactro/21-9-25-a/server/node_modules/express/lib/router/route.js:119:3)
+    at Layer.handle [as handle_request] (/home/vibhor/Downloads/vibhorpersonal/Cactro/21-9-25-a/server/node_modules/express/lib/router/layer.js:95:5)
+    at /home/vibhor/Downloads/vibhorpersonal/Cactro/21-9-25-a/server/node_modules/express/lib/router/index.js:284:15
+    at Function.process_params (/home/vibhor/Downloads/vibhorpersonal/Cactro/21-9-25-a/server/node_modules/express/lib/router/index.js:346:12)
+    at next (/home/vibhor/Downloads/vibhorpersonal/Cactro/21-9-25-a/server/node_modules/express/lib/router/index.js:280:10)
+    at Function.handle (/home/vibhor/Downloads/vibhorpersonal/Cactro/21-9-25-a/server/node_modules/express/lib/router/index.js:175:3)
+::ffff:127.0.0.1 - - [21/Sep/2025:08:02:42 +0000] "GET /api/videos HTTP/1.1" 403 51 "-" "curl/7.81.0"
