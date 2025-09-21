@@ -9,26 +9,31 @@ export const authOptions: NextAuthOptions = {
     })
   ],
   secret: process.env.NEXTAUTH_SECRET,
+  debug: false,
   callbacks: {
     async jwt({ token, account, profile }) {
-      if (account && profile) {
+      console.log('JWT callback:', { token, account, profile })
+      if (account) {
         token.accessToken = account.access_token
         token.refreshToken = account.refresh_token
+        token.idToken = account.id_token
       }
       return token
     },
     async session({ session, token }) {
+      console.log('Session callback:', { session, token })
       if (token) {
         session.accessToken = token.accessToken as string
         session.refreshToken = token.refreshToken as string
+        session.idToken = token.idToken as string
       }
       return session
     },
+    async signIn({ user, account, profile }) {
+      console.log('SignIn callback:', { user, account, profile })
+      return true
+    },
   },
-  // Remove custom signIn page to allow default NextAuth behavior
-  // pages: {
-  //   signIn: '/',
-  // },
   session: {
     strategy: 'jwt',
   },

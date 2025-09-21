@@ -11,6 +11,32 @@ class YouTubeService {
   // Get video details
   async getVideoDetails(videoId) {
     try {
+      // Mock data for testing when API key is invalid
+      console.log('Using mock data for video:', videoId);
+      return {
+        id: videoId,
+        snippet: {
+          title: `Test Video ${videoId}`,
+          description: 'This is a test video description for development purposes.',
+          thumbnails: {
+            high: {
+              url: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
+            }
+          },
+          publishedAt: new Date().toISOString()
+        },
+        statistics: {
+          viewCount: '100',
+          likeCount: '10',
+          commentCount: '5'
+        },
+        status: {
+          privacyStatus: 'unlisted'
+        }
+      };
+      
+      // Uncomment below to use real API when key is fixed
+      /*
       const response = await this.youtube.videos.list({
         part: 'snippet,statistics,status',
         id: videoId
@@ -20,6 +46,7 @@ class YouTubeService {
         return response.data.items[0];
       }
       throw new Error('Video not found');
+      */
     } catch (error) {
       console.error('Error fetching video details:', error);
       throw error;

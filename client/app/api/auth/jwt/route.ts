@@ -22,21 +22,23 @@ export async function POST(request: NextRequest) {
       )
     }
     
-    if (!session.accessToken) {
+    const googleToken = session.accessToken || session.idToken
+    
+    if (!googleToken) {
       return NextResponse.json(
-        { error: 'No access token found. Please sign in with Google again.' },
+        { error: 'No Google token found. Please sign in with Google again.' },
         { status: 401 }
       )
     }
 
-    // Send the Google access token to the server to get JWT tokens
+    // Send the Google token to the server to get JWT tokens
     const response = await fetch(`${API_BASE_URL}/api/auth/google`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        token: session.accessToken
+        token: googleToken
       })
     })
 

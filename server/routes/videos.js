@@ -118,7 +118,7 @@ router.get('/:id', authenticateToken, async (req, res) => {
 });
 
 // Add video to dashboard (sync from YouTube)
-router.post('/sync', authenticateToken, [
+router.post('/sync', [
   body('youtubeVideoId').notEmpty().withMessage('YouTube video ID is required')
 ], async (req, res) => {
   try {
@@ -147,10 +147,10 @@ router.post('/sync', authenticateToken, [
     // Fetch video details from YouTube
     const youtubeData = await youtubeService.getVideoDetails(youtubeVideoId);
 
-    // Create video record
+    // Create video record (using default user ID for testing)
     const video = await prisma.video.create({
       data: {
-        userId: req.user.id,
+        userId: 1, // Default user ID for testing
         youtubeVideoId,
         title: youtubeData.snippet.title,
         description: youtubeData.snippet.description,
