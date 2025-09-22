@@ -56,7 +56,39 @@ export function CommentsSection({ video }: CommentsSectionProps) {
   const loadComments = async () => {
     setIsRefreshing(true)
     try {
-      const response = await fetch(`/api/comments/video/${video.id}`)
+      // Get JWT token from session
+      const sessionResponse = await fetch('/api/auth/session')
+      const session = await sessionResponse.json()
+      
+      if (!session?.accessToken) {
+        toast.error('Please sign in to view comments')
+        return
+      }
+
+      // Get JWT token from backend
+      const jwtResponse = await fetch('/api/auth/jwt', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          accessToken: session.accessToken
+        })
+      })
+
+      if (!jwtResponse.ok) {
+        toast.error('Authentication failed')
+        return
+      }
+
+      const { accessToken } = await jwtResponse.json()
+
+      const response = await fetch(`/api/comments/video/${video.id}`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      })
+      
       if (response.ok) {
         const data = await response.json()
         setComments(data.comments || [])
@@ -79,10 +111,38 @@ export function CommentsSection({ video }: CommentsSectionProps) {
 
     setIsLoading(true)
     try {
+      // Get JWT token from session
+      const sessionResponse = await fetch('/api/auth/session')
+      const session = await sessionResponse.json()
+      
+      if (!session?.accessToken) {
+        toast.error('Please sign in to add comments')
+        return
+      }
+
+      // Get JWT token from backend
+      const jwtResponse = await fetch('/api/auth/jwt', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          accessToken: session.accessToken
+        })
+      })
+
+      if (!jwtResponse.ok) {
+        toast.error('Authentication failed')
+        return
+      }
+
+      const { accessToken } = await jwtResponse.json()
+
       const response = await fetch('/api/comments', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`
         },
         body: JSON.stringify({
           videoId: video.id,
@@ -115,10 +175,38 @@ export function CommentsSection({ video }: CommentsSectionProps) {
 
     setIsLoading(true)
     try {
+      // Get JWT token from session
+      const sessionResponse = await fetch('/api/auth/session')
+      const session = await sessionResponse.json()
+      
+      if (!session?.accessToken) {
+        toast.error('Please sign in to add replies')
+        return
+      }
+
+      // Get JWT token from backend
+      const jwtResponse = await fetch('/api/auth/jwt', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          accessToken: session.accessToken
+        })
+      })
+
+      if (!jwtResponse.ok) {
+        toast.error('Authentication failed')
+        return
+      }
+
+      const { accessToken } = await jwtResponse.json()
+
       const response = await fetch(`/api/comments/${parentCommentId}/reply`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`
         },
         body: JSON.stringify({
           text: replyText.trim()
@@ -149,8 +237,38 @@ export function CommentsSection({ video }: CommentsSectionProps) {
     }
 
     try {
+      // Get JWT token from session
+      const sessionResponse = await fetch('/api/auth/session')
+      const session = await sessionResponse.json()
+      
+      if (!session?.accessToken) {
+        toast.error('Please sign in to delete comments')
+        return
+      }
+
+      // Get JWT token from backend
+      const jwtResponse = await fetch('/api/auth/jwt', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          accessToken: session.accessToken
+        })
+      })
+
+      if (!jwtResponse.ok) {
+        toast.error('Authentication failed')
+        return
+      }
+
+      const { accessToken } = await jwtResponse.json()
+
       const response = await fetch(`/api/comments/${commentId}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
       })
 
       if (response.ok) {

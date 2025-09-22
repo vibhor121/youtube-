@@ -92,7 +92,39 @@ export function NotesSection({ video }: NotesSectionProps) {
 
   const loadNotes = async () => {
     try {
-      const response = await fetch(`/api/notes/video/${video.id}`)
+      // Get JWT token from session
+      const sessionResponse = await fetch('/api/auth/session')
+      const session = await sessionResponse.json()
+      
+      if (!session?.accessToken) {
+        toast.error('Please sign in to view notes')
+        return
+      }
+
+      // Get JWT token from backend
+      const jwtResponse = await fetch('/api/auth/jwt', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          accessToken: session.accessToken
+        })
+      })
+
+      if (!jwtResponse.ok) {
+        toast.error('Authentication failed')
+        return
+      }
+
+      const { accessToken } = await jwtResponse.json()
+
+      const response = await fetch(`/api/notes/video/${video.id}`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      })
+      
       if (response.ok) {
         const data = await response.json()
         setNotes(data.notes || [])
@@ -113,10 +145,38 @@ export function NotesSection({ video }: NotesSectionProps) {
 
     setIsLoading(true)
     try {
+      // Get JWT token from session
+      const sessionResponse = await fetch('/api/auth/session')
+      const session = await sessionResponse.json()
+      
+      if (!session?.accessToken) {
+        toast.error('Please sign in to add notes')
+        return
+      }
+
+      // Get JWT token from backend
+      const jwtResponse = await fetch('/api/auth/jwt', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          accessToken: session.accessToken
+        })
+      })
+
+      if (!jwtResponse.ok) {
+        toast.error('Authentication failed')
+        return
+      }
+
+      const { accessToken } = await jwtResponse.json()
+
       const response = await fetch('/api/notes', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`
         },
         body: JSON.stringify({
           videoId: video.id,
@@ -152,10 +212,38 @@ export function NotesSection({ video }: NotesSectionProps) {
 
     setIsLoading(true)
     try {
+      // Get JWT token from session
+      const sessionResponse = await fetch('/api/auth/session')
+      const session = await sessionResponse.json()
+      
+      if (!session?.accessToken) {
+        toast.error('Please sign in to update notes')
+        return
+      }
+
+      // Get JWT token from backend
+      const jwtResponse = await fetch('/api/auth/jwt', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          accessToken: session.accessToken
+        })
+      })
+
+      if (!jwtResponse.ok) {
+        toast.error('Authentication failed')
+        return
+      }
+
+      const { accessToken } = await jwtResponse.json()
+
       const response = await fetch(`/api/notes/${editingNote.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`
         },
         body: JSON.stringify({
           title: title.trim(),
@@ -189,8 +277,38 @@ export function NotesSection({ video }: NotesSectionProps) {
     }
 
     try {
+      // Get JWT token from session
+      const sessionResponse = await fetch('/api/auth/session')
+      const session = await sessionResponse.json()
+      
+      if (!session?.accessToken) {
+        toast.error('Please sign in to delete notes')
+        return
+      }
+
+      // Get JWT token from backend
+      const jwtResponse = await fetch('/api/auth/jwt', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          accessToken: session.accessToken
+        })
+      })
+
+      if (!jwtResponse.ok) {
+        toast.error('Authentication failed')
+        return
+      }
+
+      const { accessToken } = await jwtResponse.json()
+
       const response = await fetch(`/api/notes/${noteId}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
       })
 
       if (response.ok) {
@@ -208,10 +326,38 @@ export function NotesSection({ video }: NotesSectionProps) {
 
   const handleToggleComplete = async (note: Note) => {
     try {
+      // Get JWT token from session
+      const sessionResponse = await fetch('/api/auth/session')
+      const session = await sessionResponse.json()
+      
+      if (!session?.accessToken) {
+        toast.error('Please sign in to update notes')
+        return
+      }
+
+      // Get JWT token from backend
+      const jwtResponse = await fetch('/api/auth/jwt', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          accessToken: session.accessToken
+        })
+      })
+
+      if (!jwtResponse.ok) {
+        toast.error('Authentication failed')
+        return
+      }
+
+      const { accessToken } = await jwtResponse.json()
+
       const response = await fetch(`/api/notes/${note.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`
         },
         body: JSON.stringify({
           isCompleted: !note.isCompleted

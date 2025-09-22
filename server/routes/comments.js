@@ -213,18 +213,23 @@ router.delete('/:commentId', authenticateToken, async (req, res) => {
       });
     }
 
-    // Check if user has YouTube access
-    if (!req.user.accessToken) {
-      return res.status(403).json({ 
-        error: 'Forbidden', 
-        message: 'YouTube access required to delete comments' 
-      });
+    // Check if this is a local comment or a YouTube comment
+    const isLocalComment = commentId.startsWith('local_');
+    
+    if (!isLocalComment) {
+      // For YouTube comments, check if user has YouTube access
+      if (!req.user.accessToken) {
+        return res.status(403).json({ 
+          error: 'Forbidden', 
+          message: 'YouTube access required to delete comments' 
+        });
+      }
+
+      // Delete comment from YouTube
+      await youtubeService.deleteComment(commentId, req.user.accessToken);
     }
 
-    // Delete comment from YouTube
-    await youtubeService.deleteComment(commentId, req.user.accessToken);
-
-    // Delete comment from database
+    // Delete comment from database (for both local and YouTube comments)
     await prisma.comment.delete({
       where: { id: comment.id }
     });

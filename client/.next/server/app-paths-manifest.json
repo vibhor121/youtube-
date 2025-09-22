@@ -1,7 +1,0 @@
-{
-  "/page": "app/page.js",
-  "/api/comments/video/[videoId]/route": "app/api/comments/video/[videoId]/route.js",
-  "/dashboard/page": "app/dashboard/page.js",
-  "/api/notes/video/[videoId]/route": "app/api/notes/video/[videoId]/route.js",
-  "/api/notes/route": "app/api/notes/route.js"
-}
