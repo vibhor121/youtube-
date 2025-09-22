@@ -7,6 +7,26 @@ const { generateToken, generateRefreshToken } = require('../middleware/auth');
 const router = express.Router();
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
+// Test endpoint to check database connection
+router.get('/test', async (req, res) => {
+  try {
+    await prisma.$connect();
+    const userCount = await prisma.user.count();
+    res.json({
+      success: true,
+      message: 'Database connected successfully',
+      userCount: userCount
+    });
+  } catch (error) {
+    console.error('Database test error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Database connection failed',
+      message: error.message
+    });
+  }
+});
+
 // Google OAuth callback
 router.post('/google', async (req, res) => {
   try {
@@ -19,9 +39,19 @@ router.post('/google', async (req, res) => {
       });
     }
 
-    // For now, let's use a simpler approach - just get the user from the database
-    // This avoids token expiration issues during development
     console.log('Attempting to authenticate with token:', token.substring(0, 20) + '...');
+    
+    // Test database connection first
+    try {
+      await prisma.$connect();
+      console.log('Database connected successfully');
+    } catch (dbError) {
+      console.error('Database connection error:', dbError);
+      return res.status(500).json({ 
+        error: 'Database Error', 
+        message: 'Failed to connect to database' 
+      });
+    }
     
     // Try to find user by existing access token or create a test user
     let user = await prisma.user.findFirst({
@@ -70,8 +100,6 @@ router.post('/google', async (req, res) => {
       accessToken,
       refreshToken
     });
-    
-    return; // Exit early to avoid the rest of the function
 
   } catch (error) {
     console.error('Google auth error:', error);
