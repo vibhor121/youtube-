@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
     console.log('Session data:', {
       hasSession: !!session,
       hasUser: !!session?.user,
-      hasAccessToken: !!session?.accessToken,
+      hasAccessToken: !!(session as any)?.accessToken,
       userEmail: session?.user?.email
     })
     
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
       )
     }
     
-    const googleToken = session.accessToken || session.idToken
+    const googleToken = (session as any).accessToken || (session as any).idToken
     
     if (!googleToken) {
       return NextResponse.json(
