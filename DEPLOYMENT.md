@@ -3,12 +3,12 @@
 This guide covers multiple free deployment options for your YouTube Companion Dashboard.
 
 ## 📋 Prerequisites
-
+   
 Before deploying, ensure you have:
 - ✅ GitHub repository (already done!)
-- ✅ Environment variables configured
+- ✅ Environment variables configured      
 - ✅ Database setup (PostgreSQL)
-
+    
 ## 🎯 Recommended Free Hosting Options
 
 ### 1. **Vercel (Recommended) - Frontend + Backend**
