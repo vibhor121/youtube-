@@ -31,6 +31,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    console.log('Using Google token:', googleToken.substring(0, 20) + '...')
+
     // Send the Google token to the server to get JWT tokens
     const response = await fetch(`${API_BASE_URL}/api/auth/google`, {
       method: 'POST',
